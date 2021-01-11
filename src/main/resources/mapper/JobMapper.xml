@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinog2c.base.job.dao.JobMapper" >
+  <resultMap id="BaseResultMap" type="com.sinog2c.base.job.bean.Job" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="HTTPURL" property="httpurl" jdbcType="VARCHAR" />
+    <result column="HTTPMETHOD" property="httpmethod" jdbcType="VARCHAR" />
+    <result column="PARAMS" property="params" jdbcType="VARCHAR" />
+    <result column="CRON" property="cron" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, HTTPURL, HTTPMETHOD, PARAMS, CRON, STATUS
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from DB_DATA.JOB
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from DB_DATA.JOB
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sinog2c.base.job.bean.Job" >
+    insert into DB_DATA.JOB (ID, HTTPURL, HTTPMETHOD, 
+      PARAMS, CRON, STATUS
+      )
+    values (#{id,jdbcType=VARCHAR}, #{httpurl,jdbcType=VARCHAR}, #{httpmethod,jdbcType=VARCHAR}, 
+      #{params,jdbcType=VARCHAR}, #{cron,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sinog2c.base.job.bean.Job" >
+    insert into DB_DATA.JOB
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="httpurl != null" >
+        HTTPURL,
+      </if>
+      <if test="httpmethod != null" >
+        HTTPMETHOD,
+      </if>
+      <if test="params != null" >
+        PARAMS,
+      </if>
+      <if test="cron != null" >
+        CRON,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="httpurl != null" >
+        #{httpurl,jdbcType=VARCHAR},
+      </if>
+      <if test="httpmethod != null" >
+        #{httpmethod,jdbcType=VARCHAR},
+      </if>
+      <if test="params != null" >
+        #{params,jdbcType=VARCHAR},
+      </if>
+      <if test="cron != null" >
+        #{cron,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sinog2c.base.job.bean.Job" >
+    update DB_DATA.JOB
+    <set >
+      <if test="httpurl != null" >
+        HTTPURL = #{httpurl,jdbcType=VARCHAR},
+      </if>
+      <if test="httpmethod != null" >
+        HTTPMETHOD = #{httpmethod,jdbcType=VARCHAR},
+      </if>
+      <if test="params != null" >
+        PARAMS = #{params,jdbcType=VARCHAR},
+      </if>
+      <if test="cron != null" >
+        CRON = #{cron,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sinog2c.base.job.bean.Job" >
+    update DB_DATA.JOB
+    set HTTPURL = #{httpurl,jdbcType=VARCHAR},
+      HTTPMETHOD = #{httpmethod,jdbcType=VARCHAR},
+      PARAMS = #{params,jdbcType=VARCHAR},
+      CRON = #{cron,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
