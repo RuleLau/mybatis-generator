@@ -1,5 +1,7 @@
 package com.sinog2c.base.job;
 
+import com.sinog2c.base.job.util.DbConnectUtils;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -47,12 +49,10 @@ public class SwingComponent {
 //        codeTypeBox.setSelectedItem(selectedIndex);
         codeTypeBox.setBounds(x, y, width, height);
         // 添加下拉框事件监听器
-        codeTypeBox.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED) {
-                    // 选择的下拉框选项
-                    System.out.println(e.getItem());
-                }
+        codeTypeBox.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                // 选择的下拉框选项
+                System.out.println(e.getItem());
             }
         });
         return codeTypeBox;
@@ -69,7 +69,7 @@ public class SwingComponent {
         // 下拉框
         panel.add(buildJLabel("数据库类型", 30, 20, 80, 25));
         String[] dbs = new String[]{"mysql", "dm", "oracle"};
-        panel.add(buildJComboBox("mysql", "mysql", dbs, 0, 10, 0, 165, 25));
+        panel.add(buildJComboBox("dm", "dm", dbs, 0, 10, 0, 165, 25));
 
         // 创建 Url
         dbUrlLabel.setBounds(10, 20, 80, 25);
@@ -97,11 +97,9 @@ public class SwingComponent {
 
     private void addActionListener(JButton saveButton) {
         // 为按钮绑定监听器
-        saveButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // 对话框
-                JOptionPane.showMessageDialog(null, dbUrl.getText().trim() + "保存成功！");
-            }
+        saveButton.addActionListener(e -> {
+            // 对话框
+            JOptionPane.showMessageDialog(null, dbUrl.getText().trim() + "保存成功！");
         });
     }
 

@@ -1,13 +1,21 @@
 package com.sinog2c.base.job;
 
+import com.sinog2c.base.job.util.DbConnectUtils;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 public class WeimingSyncApplets {
+
+
+    private static JTextField dbUrl;
+
+    private static JTextField dbUserName;
+
+    private static JPasswordField dbPassWord;
+
+    private static JComboBox<String> codeTypeBox;
 
     public static void main(String[] args) {
         // 面板组件
@@ -27,21 +35,26 @@ public class WeimingSyncApplets {
 
         // 下拉框
         dbPanel.add(buildJLabel("数据库类型", 30, 20, 80, 25));
-        String dbs[] = {"mysql", "oracle", "sqlserver"};
+        String dbs[] = {"mysql", "oracle", "dm"};
         dbPanel.add(buildJComboBox("mysql", "mysql", dbs, 0, 100, 20, 165, 25));
 
         // 文本框
-        dbPanel.add(buildJLabel("用户名", 30, 50, 80, 25));
-        JTextField dbUserName = buildJTextField("dbUserName", "dbUserName", 20, 100, 50, 165, 25);
+        dbPanel.add(buildJLabel("连接地址", 30, 50, 80, 25));
+        dbUrl = buildJTextField("dbUrl", "dbUrl", 20, 100, 50, 165, 25);
+        dbPanel.add(dbUrl);
+
+        // 文本框
+        dbPanel.add(buildJLabel("用户名", 30, 80, 80, 25));
+        dbUserName = buildJTextField("dbUserName", "dbUserName", 20, 100, 50, 165, 25);
         dbPanel.add(dbUserName);
 
         // 密码
-        dbPanel.add(buildJLabel("密码", 30, 80, 80, 25));
-        JPasswordField dbPassWord = buildJPasswordField("dbPassWord", "dbPassWord", 20, 100, 80, 165, 25);
+        dbPanel.add(buildJLabel("密码", 30, 110, 80, 25));
+        dbPassWord = buildJPasswordField("dbPassWord", "dbPassWord", 20, 100, 80, 165, 25);
         dbPanel.add(dbPassWord);
 
         // 添加按钮，并为按钮绑定事件监听
-        JButton saveButton = buildJButton("保存", 185, 230, 80, 25);
+        JButton saveButton = buildJButton("测试连接", 185, 230, 80, 25);
         addActionListener(saveButton);
         dbPanel.add(saveButton);
 
@@ -50,11 +63,18 @@ public class WeimingSyncApplets {
 
     private static void addActionListener(JButton saveButton) {
         // 为按钮绑定监听器
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // 对话框
-                JOptionPane.showMessageDialog(null, "保存成功！");
+        saveButton.addActionListener(e -> {
+            boolean success = false;
+            // 对话框
+            try {
+                success = DbConnectUtils.connect(dbUrl.getText(), dbUserName.getText(), dbPassWord.getText(), codeTypeBox.getSelectedItem().toString());
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+            if (success) {
+                JOptionPane.showMessageDialog(null, "连接成功！");
+            }else {
+                JOptionPane.showMessageDialog(null, "连接失败！");
             }
         });
     }
@@ -81,26 +101,23 @@ public class WeimingSyncApplets {
         return text;
     }
 
-    private static JComboBox<String> buildJComboBox(Object selectedItem, String name, String[] elements, int selectedIndex, int x, int y, int width, int height) {
+    private static JComboBox<String> buildJComboBox(String selectedItem, String name, String[] elements, int selectedIndex, int x, int y, int width, int height) {
         DefaultComboBoxModel<String> codeTypeModel = new DefaultComboBoxModel<>();
         // elements 下拉框中的选项
         for (String element : elements) {
             codeTypeModel.addElement(element);
         }
-        JComboBox<String> codeTypeBox = new JComboBox<>(codeTypeModel);
+        codeTypeBox = new JComboBox<>(codeTypeModel);
         codeTypeBox.setName(name);
         // 默认选中的下拉框选项
         codeTypeBox.setSelectedItem(selectedItem);
 //        codeTypeBox.setSelectedItem(selectedIndex);
         codeTypeBox.setBounds(x, y, width, height);
         // 添加下拉框事件监听器
-        codeTypeBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED) {
-                    // 选择的下拉框选项
-                    System.out.println(e.getItem());
-                }
+        codeTypeBox.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                // 选择的下拉框选项
+                System.out.println(e.getItem());
             }
         });
         return codeTypeBox;

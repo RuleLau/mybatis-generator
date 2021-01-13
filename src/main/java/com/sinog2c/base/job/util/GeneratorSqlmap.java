@@ -11,7 +11,7 @@ import org.mybatis.generator.internal.DefaultShellCallback;
 
 public class GeneratorSqlmap {
 
-	public void generator() throws Exception{
+	public static void generator() throws Exception{
 
 		List<String> warnings = new ArrayList<String>();
 		boolean overwrite = true;
@@ -27,7 +27,7 @@ public class GeneratorSqlmap {
 	public static void main(String[] args) throws Exception {
 		try {
 			GeneratorSqlmap generatorSqlmap = new GeneratorSqlmap();
-			generatorSqlmap.generator();
+			generator();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
